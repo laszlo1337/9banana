@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onStart() {
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         nineIntent = packageManager.getLaunchIntentForPackage(ninegagPackageString)
         if (nineIntent != null) {
             nineIntent?.addCategory(Intent.CATEGORY_LAUNCHER)
-            startService(Intent(this, ScrollDetectorService::class.java))
+            startService(Intent(this, GestureDetectorService::class.java))
             startActivity(nineIntent)
         } else {
             AlertDialog.Builder(this)
