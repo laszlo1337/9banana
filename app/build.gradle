@@ -8,11 +8,12 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
-        applicationId "io.finefabric.a9meter"
-        minSdkVersion 21
+        applicationId "io.finefabric.ninebanana"
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

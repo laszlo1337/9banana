@@ -1,4 +1,4 @@
-package io.finefabric.a9meter
+package io.finefabric.ninebanana
 
 import org.junit.Test
 
