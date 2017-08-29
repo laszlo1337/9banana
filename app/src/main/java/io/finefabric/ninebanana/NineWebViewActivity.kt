@@ -17,9 +17,11 @@ import android.view.View
 import android.webkit.WebViewClient
 import com.mancj.slideup.SlideUp
 import com.mancj.slideup.SlideUpBuilder
+import io.finefabric.ninebanana.achievements.AchievementData
+import io.finefabric.ninebanana.achievements.AchievementUnlocked
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_slide_up_fragment.*
-import kotlinx.android.synthetic.main.distance_view.view.*
+import kotlinx.android.synthetic.main.item_distance_view.view.*
 
 
 class NineWebViewActivity : AppCompatActivity() {
@@ -88,15 +90,23 @@ class NineWebViewActivity : AppCompatActivity() {
             }
 
             Snackbar.make(container, "Press again to exit", Snackbar.LENGTH_SHORT)
-                    .setAction("MENU", { _ -> slideUp.show() }).show()
+                    .setAction("MENU", { _ ->
+                        slideUp.show()
+                        showAchievement(null, null)
+                     }).show()
             backPressedOnce = true
             Handler().postDelayed({ kotlin.run { backPressedOnce = false } }, 2000)
         }
     }
 
-//    fun showAchievement(title: String?, subtitle: String?){
-//
-//    }
+    fun showAchievement(title: String?, subtitle: String?){
+        if(canDrawAchievements){
+
+            val data1 = AchievementData().setTitle("Achievement unlocked!").setSubtitle("testing 1 2 3 - is this achievement achieved?")
+            val data = AchievementData().setTitle("\"the_8cm_guy\"").setSubtitle("let's not talk about it, just keep scrolling...")
+            AchievementUnlocked(applicationContext).setReadingDelay(2000).setRounded(false).show(data,data1)
+        }
+    }
 
     fun allowedToDrawOverlays(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:background="@drawable/rounded_up_corners_bg">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/standard_16dp"
+        android:text="Distance scrolled"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorAccent" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/bananas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:text="10000000000231.3"
+        android:textColor="@color/textBlack"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:text="bananas"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/textGray" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/kilometers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:text="123909.5"
+        android:textColor="@color/textBlack"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:text="kilometers"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/textGray" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/miles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:text="13667.6"
+        android:textColor="@color/textBlack"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:text="miles"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/textGray" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/standard_16dp"
+        android:layout_marginTop="24dp"
+        android:text="Goals achieved"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorAccent"  />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/goals_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="@dimen/standard_16dp"
+        android:paddingEnd="@dimen/standard_16dp"/>
+
+</android.support.v7.widget.LinearLayoutCompat>

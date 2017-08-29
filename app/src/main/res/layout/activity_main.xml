@@ -20,14 +20,14 @@
         android:layout_marginEnd="4dp"
         android:gravity="end">
 
-        <include layout="@layout/distance_view"
+        <include layout="@layout/item_distance_view"
             android:id="@+id/banana"/>
 
-        <include layout="@layout/distance_view"
+        <include layout="@layout/item_distance_view"
             android:id="@+id/kilometers"
             />
 
-        <include layout="@layout/distance_view"
+        <include layout="@layout/item_distance_view"
             android:id="@+id/miles"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
