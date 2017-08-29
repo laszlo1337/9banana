@@ -92,7 +92,7 @@ class NineWebViewActivity : AppCompatActivity() {
             Snackbar.make(container, "Press again to exit", Snackbar.LENGTH_SHORT)
                     .setAction("MENU", { _ ->
                         slideUp.show()
-                        showAchievement(null, null)
+//                        showAchievement(null, null)
                      }).show()
             backPressedOnce = true
             Handler().postDelayed({ kotlin.run { backPressedOnce = false } }, 2000)
