@@ -15,8 +15,7 @@
         >
         <activity
             android:screenOrientation="portrait"
-            android:name="io.finefabric.ninebanana.NineWebViewActivity"
-            android:theme="@style/Splash">
+            android:name="io.finefabric.ninebanana.NineWebViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -6,7 +6,7 @@
     android:gravity="center"
     android:layout_margin="4dp"
     xmlns:appCompat="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/score_background">
+    android:background="@drawable/distance_chip_background">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/distance"

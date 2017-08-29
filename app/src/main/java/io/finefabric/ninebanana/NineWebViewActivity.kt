@@ -12,9 +12,13 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.webkit.WebViewClient
+import com.mancj.slideup.SlideUp
+import com.mancj.slideup.SlideUpBuilder
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_slide_up_fragment.*
 import kotlinx.android.synthetic.main.distance_view.view.*
 
 
@@ -24,11 +28,15 @@ class NineWebViewActivity : AppCompatActivity() {
 
     private val REQUEST_CODE: Int = 9
 
-    private var oneMillimetre = 0.0 //one millimetre calculated with display density
+    private var oneMillimetre = 0.0 //one millimetre based on display density
 
     private var backPressedOnce = false
 
     private var totalDistanceScrolledDown = 0.0
+
+    private lateinit var slideUp: SlideUp
+
+    private var canDrawAchievements = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +45,6 @@ class NineWebViewActivity : AppCompatActivity() {
         oneMillimetre = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f, resources.displayMetrics).toDouble()
 
         setUpWebView()
-
 
         web_view.loadUrl(NINE_GAG_URL)
 
@@ -52,19 +59,26 @@ class NineWebViewActivity : AppCompatActivity() {
 
             }
         })
+
+        setUpFragments()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
+        kilometers.visibility = View.GONE
+        miles.visibility = View.GONE
+        canDrawAchievements = allowedToDrawOverlays()
     }
-
-
 
     fun pxToMm(px: Int): Double {
         return px / oneMillimetre
     }
 
     override fun onBackPressed() {
+        if (slideUp.isVisible) {
+            slideUp.hide()
+            return
+        }
         if (web_view.canGoBack()) {
             web_view.goBack()
         } else {
@@ -73,7 +87,8 @@ class NineWebViewActivity : AppCompatActivity() {
                 return
             }
 
-            Snackbar.make(container, "Press again to exit", Snackbar.LENGTH_LONG).setAction("MENU", View.OnClickListener { view -> 1+1 }).show()
+            Snackbar.make(container, "Press again to exit", Snackbar.LENGTH_SHORT)
+                    .setAction("MENU", { _ -> slideUp.show() }).show()
             backPressedOnce = true
             Handler().postDelayed({ kotlin.run { backPressedOnce = false } }, 2000)
         }
@@ -83,15 +98,16 @@ class NineWebViewActivity : AppCompatActivity() {
 //
 //    }
 
-
-
     fun allowedToDrawOverlays(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true
         }
         return if (!Settings.canDrawOverlays(this)) {
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + packageName))
-            startActivityForResult(intent, REQUEST_CODE)
+            Snackbar.make(container, "Please allow system overlays for displaying achievements", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("ALLOW", { _ ->
+                        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + packageName))
+                        startActivityForResult(intent, REQUEST_CODE)
+                    }).show()
             false
         } else {
             true
@@ -99,20 +115,26 @@ class NineWebViewActivity : AppCompatActivity() {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
-
+                canDrawAchievements = true
             }
         }
     }
 
-    fun calculateAndDisplayDistances(distanceInMm: Double) {
-
+    private fun setUpFragments() {
+        slideUp = SlideUpBuilder(slide_view)
+                .withStartGravity(Gravity.BOTTOM)
+                .withLoggingEnabled(true)
+                .withGesturesEnabled(true)
+                .withStartState(SlideUp.State.HIDDEN)
+                .withListeners(SlideUp.Listener.Slide { percent -> dim.alpha = (1 - percent / 100) })
+                .build()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    fun setUpWebView(){
+    private fun setUpWebView() {
         val chromeClient = ObservableWebChromeClient()
         chromeClient.setOnPageLoadedListener(object : ObservableWebChromeClient.OnPageLoadedListener {
             override fun onPageLoaded() {
