@@ -26,7 +26,7 @@ class ContainerFragment: Fragment(){
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
-        val fragments = arrayListOf<Fragment>(GoalsFragment(), SettingsFragment())
+        val fragments = arrayListOf(GoalsFragment(), SettingsFragment())
         val adapter = FragmentsPagerAdapter(activity.supportFragmentManager)
         adapter.setFragments(fragments)
         fragment_view_pager.adapter = adapter
@@ -35,7 +35,7 @@ class ContainerFragment: Fragment(){
 
         bottom_navigation.addItem(AHBottomNavigationItem("Goals", R.drawable.ic_fiber_manual_record_black_24dp))
         bottom_navigation.addItem(AHBottomNavigationItem("Leaderboard", R.drawable.ic_fiber_manual_record_black_24dp))
-        bottom_navigation.addItem(AHBottomNavigationItem("Options", R.drawable.ic_fiber_manual_record_black_24dp))
+        bottom_navigation.addItem(AHBottomNavigationItem("Settings", R.drawable.ic_fiber_manual_record_black_24dp))
         bottom_navigation.addItem(AHBottomNavigationItem("Donate", R.drawable.ic_fiber_manual_record_black_24dp))
 
         bottom_navigation.setOnTabSelectedListener { position, wasSelected ->
