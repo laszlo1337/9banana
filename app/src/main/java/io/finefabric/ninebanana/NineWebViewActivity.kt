@@ -8,46 +8,38 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.webkit.WebViewClient
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.distance_view.view.*
 
 
 class NineWebViewActivity : AppCompatActivity() {
 
     private val NINE_GAG_URL: String = "http://m.9gag.com"
 
-    private var calculatedMm    = 0f
+    private val REQUEST_CODE: Int = 9
+
+    private var oneMillimetre = 0.0 //one millimetre calculated with display density
+
     private var backPressedOnce = false
 
-    private var totalDistanceScrolledDown = 0f
+    private var totalDistanceScrolledDown = 0.0
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        calculatedMm = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f, resources.displayMetrics)
+        oneMillimetre = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f, resources.displayMetrics).toDouble()
 
-        val chromeClient = ObservableWebChromeClient()
+        setUpWebView()
 
-        web_view.webChromeClient = chromeClient
-        web_view.webViewClient = WebViewClient()
 
-        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
-        web_view.settings.javaScriptCanOpenWindowsAutomatically = false
-        web_view.settings.javaScriptEnabled = true
-        web_view.settings.domStorageEnabled = true
-
-        chromeClient.setOnPageLoadedListener(object : ObservableWebChromeClient.OnPageLoadedListener {
-            override fun onPageLoaded() {
-                web_view.visibility = View.VISIBLE
-            }
-        })
+        web_view.loadUrl(NINE_GAG_URL)
 
         web_view.setOnYScrollChangedListener(object : ObservableWebView.OnScrollChangedListener {
             override fun onYScrollChange(previousPosY: Int, currentPosY: Int) {
@@ -55,18 +47,21 @@ class NineWebViewActivity : AppCompatActivity() {
 
                 Log.d("Scroll calculated total", ": " + totalDistanceScrolledDown)
                 Log.d("Scroll pos Y in mm: ", pxToMm(currentPosY).toString())
-                if (totalDistanceScrolledDown > 1000 && totalDistanceScrolledDown < 1200){
-                    showAchievement(null,null)
-                }
+
+                banana.distance.text = String.format("%.1f", totalDistanceScrolledDown)
+
             }
         })
-
-        web_view.loadUrl(NINE_GAG_URL)
-
     }
 
-    fun pxToMm(px: Int): Float {
-        return px / calculatedMm
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+    }
+
+
+
+    fun pxToMm(px: Int): Double {
+        return px / oneMillimetre
     }
 
     override fun onBackPressed() {
@@ -78,19 +73,19 @@ class NineWebViewActivity : AppCompatActivity() {
                 return
             }
 
-            Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show()
+            Snackbar.make(container, "Press again to exit", Snackbar.LENGTH_LONG).setAction("MENU", View.OnClickListener { view -> 1+1 }).show()
             backPressedOnce = true
             Handler().postDelayed({ kotlin.run { backPressedOnce = false } }, 2000)
         }
     }
 
-    fun showAchievement(title: String?, subtitle: String?){
+//    fun showAchievement(title: String?, subtitle: String?){
+//
+//    }
 
-    }
 
-    private val REQUEST_CODE: Int = 9
 
-    fun allowedToDrawOverlays(): Boolean{
+    fun allowedToDrawOverlays(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true
         }
@@ -110,5 +105,25 @@ class NineWebViewActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    fun calculateAndDisplayDistances(distanceInMm: Double) {
+
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    fun setUpWebView(){
+        val chromeClient = ObservableWebChromeClient()
+        chromeClient.setOnPageLoadedListener(object : ObservableWebChromeClient.OnPageLoadedListener {
+            override fun onPageLoaded() {
+                web_view.visibility = View.VISIBLE
+            }
+        })
+        web_view.webChromeClient = chromeClient
+        web_view.webViewClient = WebViewClient()
+        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
+        web_view.settings.javaScriptCanOpenWindowsAutomatically = false
+        web_view.settings.javaScriptEnabled = true
+        web_view.settings.domStorageEnabled = true
     }
 }

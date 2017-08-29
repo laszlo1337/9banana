@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -8,6 +9,28 @@
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="4dp"
+        android:gravity="end">
+
+        <include layout="@layout/distance_view"
+            android:id="@+id/banana"/>
+
+        <include layout="@layout/distance_view"
+            android:id="@+id/kilometers"
+            />
+
+        <include layout="@layout/distance_view"
+            android:id="@+id/miles"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
 
 </FrameLayout>
