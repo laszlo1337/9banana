@@ -19,29 +19,30 @@
         android:layout_marginTop="80dp"
         android:background="@drawable/rounded_up_corners_bg">
 
-        <ImageView
-            android:layout_below="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:id="@+id/imageView"
-            android:layout_marginTop="4dp"/>
-
         <TextView
-            android:layout_alignParentTop="true"
-            android:text="Slide to close"
+            android:id="@+id/lbl_slide_to_close"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/standard_16dp"
             android:gravity="center_horizontal"
-            android:textColor="@color/grey200"
-            android:layout_marginTop="@dimen/standard_16dp" />
+            android:text="Slide to close"
+            android:textColor="@color/grey200" />
 
-        <fragment class="io.finefabric.ninebanana.fragments.ContainerFragment"
-            android:layout_below="@id/imageView"
-            android:id="@+id/fragment"
+        <ImageView
+            android:id="@+id/slide_to_close_arrow"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_slide_to_close"
+            android:layout_marginTop="4dp"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
+
+        <fragment
+            android:id="@+id/fragment"
+            class="io.finefabric.ninebanana.fragments.ContainerFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/slide_to_close_arrow" />
 
     </RelativeLayout>
 

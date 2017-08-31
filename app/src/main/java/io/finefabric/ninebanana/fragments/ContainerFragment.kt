@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import io.finefabric.ninebanana.R
-import kotlinx.android.synthetic.main.layout_fragment_container.*
+import kotlinx.android.synthetic.main.fragment_container.*
 
 /**
  * Created by laszlo on 2017-08-29.
@@ -21,12 +21,12 @@ class ContainerFragment: Fragment(){
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.layout_fragment_container, container, false)
+        return inflater.inflate(R.layout.fragment_container, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
-        val fragments = arrayListOf(GoalsFragment(), SettingsFragment())
+        val fragments = arrayListOf(GoalsFragment(), LeaderboardFragment(),SettingsFragment())
         val adapter = FragmentsPagerAdapter(activity.supportFragmentManager)
         adapter.setFragments(fragments)
         fragment_view_pager.adapter = adapter

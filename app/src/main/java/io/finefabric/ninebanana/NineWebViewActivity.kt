@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.util.TypedValue
@@ -20,8 +21,8 @@ import com.mancj.slideup.SlideUpBuilder
 import io.finefabric.ninebanana.achievements.AchievementData
 import io.finefabric.ninebanana.achievements.AchievementUnlocked
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_slide_up_fragment.*
 import kotlinx.android.synthetic.main.item_distance_view.view.*
+import kotlinx.android.synthetic.main.slide_up_fragment_layout.*
 
 
 class NineWebViewActivity : AppCompatActivity() {
@@ -81,6 +82,7 @@ class NineWebViewActivity : AppCompatActivity() {
             slideUp.hide()
             return
         }
+        showAchievement(null, null)
         if (web_view.canGoBack()) {
             web_view.goBack()
         } else {
@@ -102,9 +104,9 @@ class NineWebViewActivity : AppCompatActivity() {
     fun showAchievement(title: String?, subtitle: String?){
         if(canDrawAchievements){
 
-            val data1 = AchievementData().setTitle("Achievement unlocked!").setSubtitle("testing 1 2 3 - is this achievement achieved?")
-            val data = AchievementData().setTitle("\"the_8cm_guy\"").setSubtitle("let's not talk about it, just keep scrolling...")
-            AchievementUnlocked(applicationContext).setReadingDelay(2000).setRounded(false).show(data,data1)
+            val data1 = AchievementData().setTitle("Achievement unlocked!").setSubtitle("testing 1 2 3 - is this achievement achieved?").setIcon(resources.getDrawable( R.drawable.placeholder))
+            val data = AchievementData().setTitle("\"the_8cm_guy\"").setSubtitle("let's not talk about it, just keep scrolling...").setIcon(ContextCompat.getDrawable(this, R.drawable.placeholder))
+            AchievementUnlocked(applicationContext).setReadingDelay(10000).setRounded(false).show(data,data1)
         }
     }
 

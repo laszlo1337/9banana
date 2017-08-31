@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/standard_16dp"
+    android:paddingEnd="@dimen/standard_16dp"
+    tools:background="@android:color/white">
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/leaderboard_item_user_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:civ_border_color="@color/colorAccent"
+        app:civ_border_width="2dp"
+        tools:src="@drawable/placeholder_eight_cm_guy" />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/leaderboard_item_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:text="the_8cm_guy"
+            android:textColor="@color/textBlack"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/leaderboard_item_user_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:text="1000 km"
+            android:textColor="@color/textGray"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/leaderboard_item_user_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+        android:textColor="@color/colorAccent"/>
+
+</android.support.v7.widget.LinearLayoutCompat>

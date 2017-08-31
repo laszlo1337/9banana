@@ -40,7 +40,7 @@
         android:background="@color/dimBackground"
         android:fitsSystemWindows="true" />
 
-    <include layout="@layout/content_slide_up_fragment"
+    <include layout="@layout/slide_up_fragment_layout"
         tools:visibility="visible"/>
 
 </FrameLayout>
