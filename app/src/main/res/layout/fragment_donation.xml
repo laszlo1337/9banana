@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:wallet="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:background="@drawable/rounded_up_corners_bg">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/standard_16dp"
+        android:text="Donate"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/textGray" />
+
+    <!--<fragment-->
+        <!--android:name="com.google.android.gms.wallet.fragment.WalletFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--wallet:environment="test"-->
+        <!--wallet:fragmentMode="buyButton"/>-->
+
+</android.support.v7.widget.LinearLayoutCompat>

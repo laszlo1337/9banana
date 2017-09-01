@@ -1,4 +1,4 @@
-package io.finefabric.ninebanana.fragments
+package io.finefabric.ninebanana.fragments.settings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,7 +10,7 @@ import io.finefabric.ninebanana.R
 /**
  * Created by laszlo on 2017-08-29.
  */
-class LeaderboardFragment : Fragment() {
+class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +18,6 @@ class LeaderboardFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 }

@@ -1,4 +1,4 @@
-package io.finefabric.ninebanana.fragments
+package io.finefabric.ninebanana.fragments.goals
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,7 +10,7 @@ import io.finefabric.ninebanana.R
 /**
  * Created by laszlo on 2017-08-29.
  */
-class DonationFragment : Fragment() {
+class GoalsFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

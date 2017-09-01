@@ -1,8 +1,10 @@
-package io.finefabric.ninebanana
+package io.finefabric.ninebanana.activity
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,16 +18,20 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.webkit.WebViewClient
+import com.bumptech.glide.Glide
 import com.mancj.slideup.SlideUp
 import com.mancj.slideup.SlideUpBuilder
+import io.finefabric.ninebanana.R
 import io.finefabric.ninebanana.achievements.AchievementData
 import io.finefabric.ninebanana.achievements.AchievementUnlocked
+import io.finefabric.ninebanana.util.ObservableWebChromeClient
+import io.finefabric.ninebanana.util.ObservableWebView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_distance_view.view.*
 import kotlinx.android.synthetic.main.slide_up_fragment_layout.*
 
 
-class NineWebViewActivity : AppCompatActivity() {
+class NineWebViewActivity : AppCompatActivity(), NineActivityView {
 
     private val NINE_GAG_URL: String = "http://m.9gag.com"
 
@@ -41,6 +47,8 @@ class NineWebViewActivity : AppCompatActivity() {
 
     private var canDrawAchievements = false
 
+    private lateinit var presenter: NineActivityPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,21 +63,22 @@ class NineWebViewActivity : AppCompatActivity() {
             override fun onYScrollChange(previousPosY: Int, currentPosY: Int) {
                 totalDistanceScrolledDown += pxToMm(currentPosY - previousPosY)
 
-                Log.d("Scroll calculated total", ": " + totalDistanceScrolledDown)
-                Log.d("Scroll pos Y in mm: ", pxToMm(currentPosY).toString())
+//                Log.d("Scroll calculated total", ": " + totalDistanceScrolledDown)
+//                Log.d("Scroll pos Y in mm: ", pxToMm(currentPosY).toString())
 
-                banana.distance.text = String.format("%.1f", totalDistanceScrolledDown)
+                distance_chip_bananas.distance.text = String.format("%.1f", totalDistanceScrolledDown)
 
             }
         })
 
         setUpFragments()
+
+        presenter = NineActivityPresenter()
+        presenter.attachView(this)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        kilometers.visibility = View.GONE
-        miles.visibility = View.GONE
         canDrawAchievements = allowedToDrawOverlays()
     }
 
@@ -95,18 +104,40 @@ class NineWebViewActivity : AppCompatActivity() {
                     .setAction("MENU", { _ ->
                         slideUp.show()
 //                        showAchievement(null, null)
-                     }).show()
+                    }).show()
             backPressedOnce = true
             Handler().postDelayed({ kotlin.run { backPressedOnce = false } }, 2000)
         }
     }
 
-    fun showAchievement(title: String?, subtitle: String?){
-        if(canDrawAchievements){
+    override fun setBananaDistance(distance: String) {
+        distance_chip_bananas.distance.text = distance
+    }
 
-            val data1 = AchievementData().setTitle("Achievement unlocked!").setSubtitle("testing 1 2 3 - is this achievement achieved?").setIcon(resources.getDrawable( R.drawable.placeholder))
-            val data = AchievementData().setTitle("\"the_8cm_guy\"").setSubtitle("let's not talk about it, just keep scrolling...").setIcon(ContextCompat.getDrawable(this, R.drawable.placeholder))
-            AchievementUnlocked(applicationContext).setReadingDelay(10000).setRounded(false).show(data,data1)
+    override fun setKmDistance(distance: String) {
+        distance_chip_kilometers.distance.text = distance
+    }
+
+    override fun setMiDistance(distance: String) {
+        distance_chip_miles.distance.text = distance
+    }
+
+    override fun showAchievement() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun showAchievement(title: String?, subtitle: String?) {
+        if (canDrawAchievements) {
+            var drawable: Drawable? = null
+            Glide.with(this).asDrawable().load("https://upload.wikimedia.org/wikipedia/commons/d/de/Windows_live_square.JPG")
+            val data1 = AchievementData().setTitle("Achievement unlocked!").setSubtitle("testing 1 2 3 - is this achievement achieved?").setIcon(drawable).setBackgroundColor(Color.parseColor("#313131"))
+            val data = AchievementData().setTitle("\"the_8cm_guy\"").setSubtitle("let's not talk about it, just keep scrolling...").setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_round))
+            val achievementUnlocked = AchievementUnlocked(applicationContext)
+            achievementUnlocked.setRounded(true)
+            achievementUnlocked.setDismissible(true)
+            achievementUnlocked.setLarge(false)
+
+            achievementUnlocked.show(data, data1)
         }
     }
 
@@ -148,16 +179,27 @@ class NineWebViewActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
         val chromeClient = ObservableWebChromeClient()
-        chromeClient.setOnPageLoadedListener(object : ObservableWebChromeClient.OnPageLoadedListener {
-            override fun onPageLoaded() {
-                web_view.visibility = View.VISIBLE
+        chromeClient.setOnPageLoadedListener(object : ObservableWebChromeClient.OnProgressChangedListener {
+            override fun onProgressChanged(progress: Int) {
+                /*
+                 * Above 70% progress level looks good when transitioning from splash to WebView
+                 */
+                Log.d("Progress = ", progress.toString())
+                if (progress > 70 && web_view.visibility == View.INVISIBLE) {
+                    web_view.visibility = View.VISIBLE
+                }
+                if (progress == 100) {
+                    Log.d("URL = ", web_view.url)
+                }
             }
         })
         web_view.webChromeClient = chromeClient
         web_view.webViewClient = WebViewClient()
-        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
+//        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
+//        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36 OPR/42.9.2246.119945"
         web_view.settings.javaScriptCanOpenWindowsAutomatically = false
         web_view.settings.javaScriptEnabled = true
         web_view.settings.domStorageEnabled = true
     }
 }
+

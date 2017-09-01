@@ -307,7 +307,7 @@ public class AchievementUnlocked {
     }
 
 
-    void setDismissible(boolean dismissible) {
+    public void setDismissible(boolean dismissible) {
         this.dismissible = dismissible;
         if (dismissible) {
             achievementLayout.setOnTouchListener(new SwipeDismissTouchListener());

@@ -19,7 +19,6 @@ public class AchievementIconView extends ImageView {
         FADE_DRAWABLE, SAME_DRAWABLE
     }
 
-
     public void setDrawable(final Drawable drawable) {
         if (drawable == null) {
             setImageDrawable(null);

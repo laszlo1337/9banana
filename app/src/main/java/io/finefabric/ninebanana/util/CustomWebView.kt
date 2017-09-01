@@ -1,4 +1,4 @@
-package io.finefabric.ninebanana
+package io.finefabric.ninebanana.util
 
 import android.content.Context
 import android.util.AttributeSet
@@ -11,10 +11,6 @@ class ObservableWebView @JvmOverloads constructor(context: Context, attrs: Attri
 
     fun setOnYScrollChangedListener(listener: OnScrollChangedListener) {
         this.onYScrollChangedListener = listener
-    }
-
-    interface OnScrollChangedListener {
-        fun onYScrollChange(previousPosY: Int, currentPosY: Int)
     }
 
     /**
@@ -32,25 +28,26 @@ class ObservableWebView @JvmOverloads constructor(context: Context, attrs: Attri
         super.onScrollChanged(l, t, oldl, oldt)
         onYScrollChangedListener?.onYScrollChange(oldt, t)
     }
+
+    interface OnScrollChangedListener {
+        fun onYScrollChange(previousPosY: Int, currentPosY: Int)
+    }
 }
 
 class ObservableWebChromeClient : WebChromeClient() {
 
-    private var onPageLoadedListener: OnPageLoadedListener? = null
+    private var onProgressChangedListener: OnProgressChangedListener? = null
 
-    /*
-     * Above 70% progress level looks good when transitioning from splash to WebView
-     */
     override fun onProgressChanged(view: WebView?, newProgress: Int) {
-        if (newProgress > 70) onPageLoadedListener?.onPageLoaded()
+        onProgressChangedListener?.onProgressChanged(newProgress)
         super.onProgressChanged(view, newProgress)
     }
 
-    fun setOnPageLoadedListener(listener: OnPageLoadedListener) {
-        this.onPageLoadedListener = listener
+    fun setOnPageLoadedListener(listener: OnProgressChangedListener) {
+        this.onProgressChangedListener = listener
     }
 
-    interface OnPageLoadedListener {
-        fun onPageLoaded()
+    interface OnProgressChangedListener {
+        fun onProgressChanged(progress: Int)
     }
 }

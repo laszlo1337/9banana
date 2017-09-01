@@ -9,30 +9,28 @@
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:padding="@dimen/standard_16dp"
         >
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/standard_16dp"
-            android:paddingStart="@dimen/standard_16dp"
             android:text="User"
+            android:textColor="@color/textGray"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/colorAccent" />
+            />
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/standard_16dp"
-            android:paddingStart="@dimen/standard_16dp"
             android:text="Place"
             android:textAlignment="viewEnd"
+            android:textColor="@color/textGray"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/colorAccent" />
+            />
 
     </android.support.v7.widget.LinearLayoutCompat>
 

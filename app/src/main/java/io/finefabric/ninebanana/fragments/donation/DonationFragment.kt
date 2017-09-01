@@ -1,4 +1,4 @@
-package io.finefabric.ninebanana.fragments
+package io.finefabric.ninebanana.fragments.donation
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,7 +10,7 @@ import io.finefabric.ninebanana.R
 /**
  * Created by laszlo on 2017-08-29.
  */
-class GoalsFragment: Fragment() {
+class DonationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +18,6 @@ class GoalsFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_goals, container, false)
+        return inflater.inflate(R.layout.fragment_donation, container, false)
     }
 }

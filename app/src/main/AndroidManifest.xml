@@ -15,7 +15,7 @@
         >
         <activity
             android:screenOrientation="portrait"
-            android:name="io.finefabric.ninebanana.NineWebViewActivity">
+            android:name="io.finefabric.ninebanana.activity.NineWebViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />

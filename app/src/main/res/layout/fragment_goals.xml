@@ -14,7 +14,7 @@
         android:padding="@dimen/standard_16dp"
         android:text="Distance scrolled"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/textGray" />
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -109,7 +109,7 @@
         android:padding="@dimen/standard_16dp"
         android:text="Goals achieved"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/textGray" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/goals_recycler_view"

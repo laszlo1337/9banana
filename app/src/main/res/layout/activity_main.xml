@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:animateLayoutChanges="true">
 
-    <io.finefabric.ninebanana.ObservableWebView
+    <io.finefabric.ninebanana.util.ObservableWebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,14 +21,17 @@
         android:gravity="end">
 
         <include layout="@layout/item_distance_view"
-            android:id="@+id/banana"/>
+            android:visibility="gone"
+            android:id="@+id/distance_chip_bananas"/>
 
         <include layout="@layout/item_distance_view"
-            android:id="@+id/kilometers"
+            android:visibility="gone"
+            android:id="@+id/distance_chip_kilometers"
             />
 
         <include layout="@layout/item_distance_view"
-            android:id="@+id/miles"/>
+            android:visibility="gone"
+            android:id="@+id/distance_chip_miles"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
 

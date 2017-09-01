@@ -12,7 +12,7 @@
         android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="1337.5"
+        android:text="@string/distance_placeholder_zero"
         android:textColor="#fff"
         android:textStyle="bold"/>
 
@@ -21,12 +21,14 @@
         android:layout_marginStart="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="km"
+        tools:text="km"
         android:visibility="gone"
         android:textColor="#fff"
         android:textStyle="bold"/>
 
     <android.support.v7.widget.AppCompatImageView
+        android:visibility="gone"
+        android:id="@+id/banana_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         appCompat:srcCompat="@drawable/banana_logo"/>
