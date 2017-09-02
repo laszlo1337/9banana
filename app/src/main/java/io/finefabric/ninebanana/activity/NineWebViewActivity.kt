@@ -3,27 +3,21 @@ package io.finefabric.ninebanana.activity
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.bumptech.glide.Glide
 import com.mancj.slideup.SlideUp
 import com.mancj.slideup.SlideUpBuilder
 import io.finefabric.ninebanana.R
-import io.finefabric.ninebanana.achievements.AchievementData
-import io.finefabric.ninebanana.achievements.AchievementUnlocked
 import io.finefabric.ninebanana.util.ObservableWebChromeClient
 import io.finefabric.ninebanana.util.ObservableWebView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -71,7 +65,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
             }
         })
 
-        setUpFragments()
+        setUpBottomSheet()
 
         presenter = NineActivityPresenter()
         presenter.attachView(this)
@@ -87,11 +81,12 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
     }
 
     override fun onBackPressed() {
+        showAchievement()
         if (slideUp.isVisible) {
             slideUp.hide()
             return
         }
-        showAchievement(null, null)
+
         if (web_view.canGoBack()) {
             web_view.goBack()
         } else {
@@ -122,22 +117,13 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
         distance_chip_miles.distance.text = distance
     }
 
-    override fun showAchievement() {
+    override fun showAchievement(title: String, subtitle: String, imageUrl: String, iconBgColor: String, bgColor: String, textColor: String, rounded: Boolean, large: Boolean) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun showAchievement(title: String?, subtitle: String?) {
+    fun showAchievement() {
         if (canDrawAchievements) {
-            var drawable: Drawable? = null
-            Glide.with(this).asDrawable().load("https://upload.wikimedia.org/wikipedia/commons/d/de/Windows_live_square.JPG")
-            val data1 = AchievementData().setTitle("Achievement unlocked!").setSubtitle("testing 1 2 3 - is this achievement achieved?").setIcon(drawable).setBackgroundColor(Color.parseColor("#313131"))
-            val data = AchievementData().setTitle("\"the_8cm_guy\"").setSubtitle("let's not talk about it, just keep scrolling...").setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_round))
-            val achievementUnlocked = AchievementUnlocked(applicationContext)
-            achievementUnlocked.setRounded(true)
-            achievementUnlocked.setDismissible(true)
-            achievementUnlocked.setLarge(false)
 
-            achievementUnlocked.show(data, data1)
         }
     }
 
@@ -166,7 +152,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
         }
     }
 
-    private fun setUpFragments() {
+    private fun setUpBottomSheet() {
         slideUp = SlideUpBuilder(slide_view)
                 .withStartGravity(Gravity.BOTTOM)
                 .withLoggingEnabled(true)
@@ -176,6 +162,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                 .build()
     }
 
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
         val chromeClient = ObservableWebChromeClient()
@@ -184,17 +171,26 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                 /*
                  * Above 70% progress level looks good when transitioning from splash to WebView
                  */
-                Log.d("Progress = ", progress.toString())
                 if (progress > 70 && web_view.visibility == View.INVISIBLE) {
                     web_view.visibility = View.VISIBLE
                 }
-                if (progress == 100) {
-                    Log.d("URL = ", web_view.url)
-                }
             }
         })
+
         web_view.webChromeClient = chromeClient
-        web_view.webViewClient = WebViewClient()
+        /*
+         * Allow for 9gag app to be opened after click on "get the app to view all %d comments"
+         */
+        web_view.webViewClient = object : WebViewClient() {
+            override fun onLoadResource(view: WebView?, url: String) {
+                if (url.startsWith("intent:")) {
+                    view?.stopLoading()
+                    intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                    startActivity(intent)
+                }
+                super.onLoadResource(view, url)
+            }
+        }
 //        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
 //        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36 OPR/42.9.2246.119945"
         web_view.settings.javaScriptCanOpenWindowsAutomatically = false

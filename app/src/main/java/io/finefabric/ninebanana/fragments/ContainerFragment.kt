@@ -43,7 +43,7 @@ class ContainerFragment: Fragment(){
         bottom_navigation.addItem(AHBottomNavigationItem("Settings", R.drawable.ic_fiber_manual_record_black_24dp))
         bottom_navigation.addItem(AHBottomNavigationItem("Donate", R.drawable.ic_fiber_manual_record_black_24dp))
 
-        bottom_navigation.setOnTabSelectedListener { position, wasSelected ->
+        bottom_navigation.setOnTabSelectedListener { position, _ ->
             fragment_view_pager.setCurrentItem(position, false)
             true
         }

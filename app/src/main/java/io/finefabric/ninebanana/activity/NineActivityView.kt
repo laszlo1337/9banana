@@ -7,7 +7,7 @@ import io.finefabric.ninebanana.base.BaseView
  */
 interface NineActivityView: BaseView {
 
-    fun showAchievement()
+    fun showAchievement(title: String, subtitle:String, imageUrl: String, iconBgColor: String, bgColor: String, textColor: String, rounded: Boolean, large: Boolean)
 
     fun setBananaDistance(distance: String)
 
