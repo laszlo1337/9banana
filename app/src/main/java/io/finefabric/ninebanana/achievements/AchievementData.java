@@ -10,9 +10,9 @@ import android.view.View;
 public class AchievementData {
     private String title = "", subtitle;
     private Drawable icon;
-    private int textColor = 0xff000000, backgroundColor = 0xffffffff, iconBackgroundColor = 0x0;
+    private int textColor = 0xff000000, backgroundColor = 0x0, iconBackgroundColor = 0x0;
     private View.OnClickListener onClickListener;
-    AchievementIconView.AchievementIconViewStates state = null;
+//    AchievementIconView.AchievementIconViewStates state = null;
 
     public AchievementData() {
     }
@@ -27,7 +27,7 @@ public class AchievementData {
         result.setTitle(data.getTitle());
         result.setSubtitle(data.getSubtitle());
         result.setIcon(data.getIcon());
-        result.setState(data.getState());
+//        result.setState(data.getState());
         result.setBackgroundColor(data.getBackgroundColor());
         result.setIconBackgroundColor(data.getIconBackgroundColor());
         result.setTextColor(data.getTextColor());
@@ -67,13 +67,13 @@ public class AchievementData {
         return subtitle;
     }
 
-    public AchievementIconView.AchievementIconViewStates getState() {
-        return state;
-    }
-
-    public void setState(AchievementIconView.AchievementIconViewStates state) {
-        this.state = state;
-    }
+//    public AchievementIconView.AchievementIconViewStates getState() {
+//        return state;
+//    }
+//
+//    public void setState(AchievementIconView.AchievementIconViewStates state) {
+//        this.state = state;
+//    }
 
     public Drawable getIcon() {
 

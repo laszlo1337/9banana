@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -223,6 +224,7 @@ public class AchievementUnlocked {
             container.addView(achievementIconBg);
             icon = new AchievementIconView(context);
             icon.setPadding(convertDpToPixel(7), convertDpToPixel(7), convertDpToPixel(7), convertDpToPixel(7));
+            icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
             LayoutParams achievementIconLP = new LayoutParams(largeSize, largeSize);
             icon.setMaxWidth(largeSize);
             icon.setLayoutParams(achievementIconLP);
@@ -851,8 +853,6 @@ public class AchievementUnlocked {
             backgroundAnimators.play(iconBgColor).with(bgColor);
             backgroundAnimators.setInterpolator(interpolator);
             backgroundAnimators.setDuration(animationMultiplier * 300);
-
-
         }
         titleIn = ObjectAnimator.ofFloat(titleTextView, View.TRANSLATION_Y, translationY, 0);
         titleIn.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1062,16 +1062,17 @@ public class AchievementUnlocked {
             //  icon.setDrawable(null);
             return;
         }
-        if (data.getState() == AchievementIconView.AchievementIconViewStates.SAME_DRAWABLE)
-            return;
+//        if (data.getState() == AchievementIconView.AchievementIconViewStates.SAME_DRAWABLE)
+//            return;
         Drawable d = data.getIcon();
-        if (d != null) {
-
-            if (data.getState() == AchievementIconView.AchievementIconViewStates.FADE_DRAWABLE)
-                icon.fadeDrawable(d);
-            else icon.setDrawable(d);
-
-        } else icon.setDrawable(null);
+//        if (d != null) {
+//
+//            if (data.getState() == AchievementIconView.AchievementIconViewStates.FADE_DRAWABLE)
+//                icon.fadeDrawable(d);
+//            else icon.setDrawable(d);
+//
+//        } else icon.setDrawable(null);
+        icon.setImageDrawable(d);
     }
 
     private class SwipeDismissTouchListener implements View.OnTouchListener {

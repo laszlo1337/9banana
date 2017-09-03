@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -18,6 +20,8 @@ import android.webkit.WebViewClient
 import com.mancj.slideup.SlideUp
 import com.mancj.slideup.SlideUpBuilder
 import io.finefabric.ninebanana.R
+import io.finefabric.ninebanana.achievements.AchievementData
+import io.finefabric.ninebanana.achievements.AchievementUnlocked
 import io.finefabric.ninebanana.util.ObservableWebChromeClient
 import io.finefabric.ninebanana.util.ObservableWebView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -123,7 +127,10 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
 
     fun showAchievement() {
         if (canDrawAchievements) {
+            val achievement = AchievementUnlocked(applicationContext).setLarge(true)
+            val data = AchievementData().setTitle("chuj").setSubtitle("dupa").setIcon(ContextCompat.getDrawable(applicationContext, R.drawable.placeholder_eight_cm_guy)).setBackgroundColor(R.color.colorPrimary)
 
+            achievement.show(data)
         }
     }
 
@@ -165,6 +172,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
+        WebView.setWebContentsDebuggingEnabled(true)
         val chromeClient = ObservableWebChromeClient()
         chromeClient.setOnPageLoadedListener(object : ObservableWebChromeClient.OnProgressChangedListener {
             override fun onProgressChanged(progress: Int) {
@@ -174,6 +182,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                 if (progress > 70 && web_view.visibility == View.INVISIBLE) {
                     web_view.visibility = View.VISIBLE
                 }
+                if (progress == 100) Log.d("url", web_view.url)
             }
         })
 
@@ -183,11 +192,12 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
          */
         web_view.webViewClient = object : WebViewClient() {
             override fun onLoadResource(view: WebView?, url: String) {
-                if (url.startsWith("intent:")) {
+
+                val wasHandledAsIntent = handleUrl(url)
+
+                if (wasHandledAsIntent)
                     view?.stopLoading()
-                    intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
-                    startActivity(intent)
-                }
+
                 super.onLoadResource(view, url)
             }
         }
@@ -196,6 +206,27 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
         web_view.settings.javaScriptCanOpenWindowsAutomatically = false
         web_view.settings.javaScriptEnabled = true
         web_view.settings.domStorageEnabled = true
+    }
+
+    private fun handleUrl(url: String): Boolean {
+        if (url.startsWith("intent:")) {
+            val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+            startActivity(intent)
+            return true
+        } else if (url.startsWith("whatsapp:")) {
+            val whatsappIntent = Intent(Intent.ACTION_SEND)
+            whatsappIntent.type = "text/plain"
+            whatsappIntent.`package` = "com.whatsapp"
+            val decodedUrl = Uri.decode(url).plus(" Sent via 9banana app")
+            whatsappIntent.putExtra(Intent.EXTRA_TEXT, decodedUrl.substring(decodedUrl.indexOf("=") + 1))
+            try {
+                startActivity(whatsappIntent)
+            } catch (ex: android.content.ActivityNotFoundException) {
+                Snackbar.make(container, "WhatsApp is not installed.", Snackbar.LENGTH_SHORT).show()
+            }
+            return true
+        }
+        return false
     }
 }
 
