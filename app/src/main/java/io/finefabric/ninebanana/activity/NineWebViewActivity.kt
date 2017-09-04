@@ -3,25 +3,33 @@ package io.finefabric.ninebanana.activity
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.mancj.slideup.SlideUp
 import com.mancj.slideup.SlideUpBuilder
 import io.finefabric.ninebanana.R
 import io.finefabric.ninebanana.achievements.AchievementData
 import io.finefabric.ninebanana.achievements.AchievementUnlocked
+import io.finefabric.ninebanana.util.GlideApp
 import io.finefabric.ninebanana.util.ObservableWebChromeClient
 import io.finefabric.ninebanana.util.ObservableWebView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -78,6 +86,8 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         canDrawAchievements = allowedToDrawOverlays()
+        //TODO make proper cookie setting
+        CookieManager.getInstance().setCookie(NINE_GAG_URL, "m_dark_theme=1")
     }
 
     fun pxToMm(px: Int): Double {
@@ -121,16 +131,56 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
         distance_chip_miles.distance.text = distance
     }
 
-    override fun showAchievement(title: String, subtitle: String, imageUrl: String, iconBgColor: String, bgColor: String, textColor: String, rounded: Boolean, large: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showAchievement(title: String, subtitle: String, imageUrl: String, bgColor: String
+                                 , iconBgColor: String, textColor: String, rounded: Boolean
+                                 , large: Boolean, bottomAligned: Boolean, onClickUrl: String) {
+
+        val achievement = AchievementUnlocked(applicationContext).setLarge(large).setRounded(rounded).isTopAligned(!bottomAligned)
+        val data = AchievementData()
+                .setTitle(title)
+                .setSubtitle(subtitle)
+                .setBackgroundColor(Color.parseColor(bgColor))
+                .setIconBackgroundColor(Color.parseColor(iconBgColor))
+                .setTextColor(Color.parseColor(textColor))
+
+        if (onClickUrl.isNotEmpty()) {
+            //TODO
+        }
+
+        GlideApp.with(this).asGif().load(imageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .listener(object : RequestListener<GifDrawable> {
+
+                    override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        achievement.show(data)
+                        return false
+                    }
+
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstResource: Boolean): Boolean {
+                        return false
+                    }
+
+                }).into(achievement.iconView)
+
     }
 
     fun showAchievement() {
         if (canDrawAchievements) {
-            val achievement = AchievementUnlocked(applicationContext).setLarge(true)
-            val data = AchievementData().setTitle("chuj").setSubtitle("dupa").setIcon(ContextCompat.getDrawable(applicationContext, R.drawable.placeholder_eight_cm_guy)).setBackgroundColor(R.color.colorPrimary)
+            val achievement = AchievementUnlocked(applicationContext).setLarge(true).setRounded(false).isTopAligned(false)
+            val data = AchievementData().setTitle("some longer title").setSubtitle(null)
+                    .setBackgroundColor(Color.parseColor("#323232"))
+                    .setIconBackgroundColor(Color.BLUE).setPopUpOnClickListener { view -> }
 
-            achievement.show(data)
+            GlideApp.with(this).asGif().load("https://media.giphy.com/media/UogSmj4xDjQZO/giphy.gif").diskCacheStrategy(DiskCacheStrategy.ALL).listener(object : RequestListener<GifDrawable> {
+                override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                    achievement.show(data)
+                    return false
+                }
+
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstResource: Boolean): Boolean {
+                    return false
+                }
+            }).into(achievement.iconView)
         }
     }
 

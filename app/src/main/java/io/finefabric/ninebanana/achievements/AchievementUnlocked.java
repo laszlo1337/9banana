@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -38,6 +39,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.text.TextUtils.isEmpty;
 import static android.view.Gravity.CENTER_HORIZONTAL;
@@ -89,13 +92,14 @@ public class AchievementUnlocked {
     private boolean isPowerSavingModeOn = false;
     private boolean isLarge = true, alignTop = true, isRounded = true;
     private ViewGroup container;
-    private AchievementIconView icon;
+    private ImageView icon;
     private TextView titleTextView;
     private ScrollTextView subtitleTextView;
     private final int focusable = WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
     private final int nonFocusable = WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
     private ViewGroup achievementLayout;
     private WindowManager.LayoutParams mainViewLP;
+    private LinearLayout achievementIconBg;
     final boolean DEBUG = true;
 
     public AchievementUnlocked(Context context) {
@@ -116,6 +120,16 @@ public class AchievementUnlocked {
     }
 
     public AchievementUnlocked setRounded(boolean rounded) {
+        if (rounded) {
+            icon = new CircleImageView(context);
+        } else {
+            icon = new AppCompatImageView(context);
+        }
+        icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        LayoutParams achievementIconLP = new LayoutParams(largeSize, largeSize);
+        icon.setMaxWidth(largeSize);
+        icon.setLayoutParams(achievementIconLP);
+        achievementIconBg.addView(icon);
         isRounded = rounded;
         return this;
     }
@@ -146,7 +160,7 @@ public class AchievementUnlocked {
         return subtitleTextView;
     }
 
-    public View getIconView() {
+    public ImageView getIconView() {
         return icon;
     }
 
@@ -167,7 +181,7 @@ public class AchievementUnlocked {
             initiatedGlobalFields = true;
             margin = convertDpToPixel(16);
             elevation = convertDpToPixel(10);
-            paddingLarge = convertDpToPixel(10);
+            paddingLarge = convertDpToPixel(7);
             paddingSmall = convertDpToPixel(5);
             smallSize = convertDpToPixel(50);
             largeSize = convertDpToPixel(65);
@@ -217,19 +231,12 @@ public class AchievementUnlocked {
             achievementBodyLP.bottomMargin = achievementBodyLP.topMargin = convertDpToPixel(10);
             container.setLayoutParams(achievementBodyLP);
             container.setTag("achievementBody");
-            LinearLayout achievementIconBg = new LinearLayout(context);
+            achievementIconBg = new LinearLayout(context);
             LayoutParams achievementIconBgLP = new LayoutParams(largeSize, largeSize);
             achievementIconBg.setLayoutParams(achievementIconBgLP);
             achievementIconBg.setTag("achievementIconBg");
             container.addView(achievementIconBg);
-            icon = new AchievementIconView(context);
-            icon.setPadding(convertDpToPixel(7), convertDpToPixel(7), convertDpToPixel(7), convertDpToPixel(7));
-            icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            LayoutParams achievementIconLP = new LayoutParams(largeSize, largeSize);
-            icon.setMaxWidth(largeSize);
-            icon.setLayoutParams(achievementIconLP);
-            icon.setTag("achievementIcon");
-            achievementIconBg.addView(icon);
+
             LinearLayout textContainer = new LinearLayout(context);
             textContainer.setClipToPadding(false);
             textContainer.setClipChildren(false);
@@ -1059,20 +1066,10 @@ public class AchievementUnlocked {
 
     private void setIcon(AchievementData data) {
         if (data == null) {
-            //  icon.setDrawable(null);
             return;
         }
-//        if (data.getState() == AchievementIconView.AchievementIconViewStates.SAME_DRAWABLE)
-//            return;
-        Drawable d = data.getIcon();
-//        if (d != null) {
-//
-//            if (data.getState() == AchievementIconView.AchievementIconViewStates.FADE_DRAWABLE)
-//                icon.fadeDrawable(d);
-//            else icon.setDrawable(d);
-//
-//        } else icon.setDrawable(null);
-        icon.setImageDrawable(d);
+
+        icon.setImageDrawable(data.getIcon());
     }
 
     private class SwipeDismissTouchListener implements View.OnTouchListener {
