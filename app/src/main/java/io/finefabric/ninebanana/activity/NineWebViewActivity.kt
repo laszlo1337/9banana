@@ -29,9 +29,9 @@ import com.mancj.slideup.SlideUpBuilder
 import io.finefabric.ninebanana.R
 import io.finefabric.ninebanana.achievements.AchievementData
 import io.finefabric.ninebanana.achievements.AchievementUnlocked
-import io.finefabric.ninebanana.util.GlideApp
-import io.finefabric.ninebanana.util.ObservableWebChromeClient
-import io.finefabric.ninebanana.util.ObservableWebView
+import io.finefabric.ninebanana.common.GlideApp
+import io.finefabric.ninebanana.common.ObservableWebChromeClient
+import io.finefabric.ninebanana.common.addListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_distance_view.view.*
 import kotlinx.android.synthetic.main.slide_up_fragment_layout.*
@@ -65,17 +65,15 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
 
         web_view.loadUrl(NINE_GAG_URL)
 
-        web_view.setOnYScrollChangedListener(object : ObservableWebView.OnScrollChangedListener {
-            override fun onYScrollChange(previousPosY: Int, currentPosY: Int) {
-                totalDistanceScrolledDown += pxToMm(currentPosY - previousPosY)
+        web_view.onYScrollChangedListener = { previousPosY, currentPosY ->
+            totalDistanceScrolledDown += pxToMm(currentPosY - previousPosY)
 
 //                Log.d("Scroll calculated total", ": " + totalDistanceScrolledDown)
 //                Log.d("Scroll pos Y in mm: ", pxToMm(currentPosY).toString())
 
-                distance_chip_bananas.distance.text = String.format("%.1f", totalDistanceScrolledDown)
+            distance_chip_bananas.distance.text = String.format("%.1f", totalDistanceScrolledDown)
 
-            }
-        })
+        }
 
         setUpBottomSheet()
 
@@ -135,7 +133,11 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                                  , iconBgColor: String, textColor: String, rounded: Boolean
                                  , large: Boolean, bottomAligned: Boolean, onClickUrl: String) {
 
-        val achievement = AchievementUnlocked(applicationContext).setLarge(large).setRounded(rounded).isTopAligned(!bottomAligned)
+        val achievement = AchievementUnlocked(applicationContext)
+                .setLarge(large)
+                .setRounded(rounded)
+                .isTopAligned(!bottomAligned)
+
         val data = AchievementData()
                 .setTitle(title)
                 .setSubtitle(subtitle)
@@ -147,20 +149,14 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
             //TODO
         }
 
-        GlideApp.with(this).asGif().load(imageUrl)
+        GlideApp.with(this).asGif()
+                .load(imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .listener(object : RequestListener<GifDrawable> {
-
-                    override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        achievement.show(data)
-                        return false
-                    }
-
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstResource: Boolean): Boolean {
-                        return false
-                    }
-
-                }).into(achievement.iconView)
+                .addListener(onResourceReady = { _, _, _, _, _ ->
+                    achievement.show(data)
+                    false
+                })
+                .into(achievement.iconView)
 
     }
 
@@ -180,7 +176,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstResource: Boolean): Boolean {
                     return false
                 }
-            }).into(achievement.iconView)
+            }).circleCrop().into(achievement.iconView)
         }
     }
 
@@ -224,20 +220,19 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
     private fun setUpWebView() {
         WebView.setWebContentsDebuggingEnabled(true)
         val chromeClient = ObservableWebChromeClient()
-        chromeClient.setOnPageLoadedListener(object : ObservableWebChromeClient.OnProgressChangedListener {
-            override fun onProgressChanged(progress: Int) {
-                /*
-                 * Above 70% progress level looks good when transitioning from splash to WebView
-                 */
-                if (progress > 70 && web_view.visibility == View.INVISIBLE) {
-                    web_view.visibility = View.VISIBLE
-                }
-                if (progress == 100) Log.d("url", web_view.url)
-            }
-        })
 
+        /**
+         * Above 70% progress level looks good when transitioning from splash to WebView
+         */
+        chromeClient.onProgressChangedListener = { progress ->
+            if (progress > 70 && web_view.visibility == View.INVISIBLE) {
+                web_view.visibility = View.VISIBLE
+            }
+            if (progress == 100) Log.d("url", web_view.url)
+        }
         web_view.webChromeClient = chromeClient
-        /*
+
+        /**
          * Allow for 9gag app to be opened after click on "get the app to view all %d comments"
          */
         web_view.webViewClient = object : WebViewClient() {

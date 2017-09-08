@@ -1,4 +1,4 @@
-package io.finefabric.ninebanana.util
+package io.finefabric.ninebanana.common
 
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule

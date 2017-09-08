@@ -1,4 +1,4 @@
-package io.finefabric.ninebanana.util
+package io.finefabric.ninebanana.common
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,11 +7,7 @@ import android.webkit.WebView
 
 class ObservableWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : WebView(context, attrs, defStyleAttr) {
 
-    private var onYScrollChangedListener: OnScrollChangedListener? = null
-
-    fun setOnYScrollChangedListener(listener: OnScrollChangedListener) {
-        this.onYScrollChangedListener = listener
-    }
+    var onYScrollChangedListener: ((previousPosY: Int, currentPosY: Int) -> Unit)? = null
 
     /**
      * This is called in response to an internal scroll in this view (i.e., the
@@ -26,28 +22,16 @@ class ObservableWebView @JvmOverloads constructor(context: Context, attrs: Attri
      */
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         super.onScrollChanged(l, t, oldl, oldt)
-        onYScrollChangedListener?.onYScrollChange(oldt, t)
-    }
-
-    interface OnScrollChangedListener {
-        fun onYScrollChange(previousPosY: Int, currentPosY: Int)
+        onYScrollChangedListener?.invoke(oldt, t)
     }
 }
 
 class ObservableWebChromeClient : WebChromeClient() {
 
-    private var onProgressChangedListener: OnProgressChangedListener? = null
+    var onProgressChangedListener: ((progress: Int) -> Unit)? = null
 
     override fun onProgressChanged(view: WebView?, newProgress: Int) {
-        onProgressChangedListener?.onProgressChanged(newProgress)
+        onProgressChangedListener?.invoke(newProgress)
         super.onProgressChanged(view, newProgress)
-    }
-
-    fun setOnPageLoadedListener(listener: OnProgressChangedListener) {
-        this.onProgressChangedListener = listener
-    }
-
-    interface OnProgressChangedListener {
-        fun onProgressChanged(progress: Int)
     }
 }

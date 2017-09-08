@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:animateLayoutChanges="true">
 
-    <io.finefabric.ninebanana.util.ObservableWebView
+    <io.finefabric.ninebanana.common.ObservableWebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
