@@ -40,13 +40,10 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import static android.text.TextUtils.isEmpty;
 import static android.view.Gravity.CENTER_HORIZONTAL;
 import static android.view.View.GONE;
 import static android.widget.LinearLayout.VERTICAL;
-import static java.lang.Boolean.FALSE;
 
 @SuppressWarnings("unused")
 /**
@@ -120,16 +117,6 @@ public class AchievementUnlocked {
     }
 
     public AchievementUnlocked setRounded(boolean rounded) {
-        if (rounded) {
-            icon = new CircleImageView(context);
-        } else {
-            icon = new AppCompatImageView(context);
-        }
-        icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        LayoutParams achievementIconLP = new LayoutParams(largeSize, largeSize);
-        icon.setMaxWidth(largeSize);
-        icon.setLayoutParams(achievementIconLP);
-        achievementIconBg.addView(icon);
         isRounded = rounded;
         return this;
     }
@@ -186,9 +173,8 @@ public class AchievementUnlocked {
             smallSize = convertDpToPixel(50);
             largeSize = convertDpToPixel(65);
             translationY = convertDpToPixel(20);
-
             achievementLayout = new RelativeLayout(context);
-            achievementLayout.setClipToPadding(FALSE);
+            achievementLayout.setClipToPadding(false);
             LayoutParams motherLayoutLP = new LayoutParams(-2, -2);
             achievementLayout.setLayoutParams(motherLayoutLP);
             achievementLayout.setTag("motherLayout");
@@ -236,7 +222,12 @@ public class AchievementUnlocked {
             achievementIconBg.setLayoutParams(achievementIconBgLP);
             achievementIconBg.setTag("achievementIconBg");
             container.addView(achievementIconBg);
-
+            icon = new AppCompatImageView(context);
+            icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            LayoutParams achievementIconLP = new LayoutParams(largeSize, largeSize);
+            icon.setMaxWidth(largeSize);
+            icon.setLayoutParams(achievementIconLP);
+            achievementIconBg.addView(icon);
             LinearLayout textContainer = new LinearLayout(context);
             textContainer.setClipToPadding(false);
             textContainer.setClipChildren(false);

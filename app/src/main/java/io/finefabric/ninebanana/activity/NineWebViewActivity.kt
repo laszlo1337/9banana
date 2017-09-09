@@ -156,13 +156,14 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                     achievement.show(data)
                     false
                 })
+                .circleCrop()
                 .into(achievement.iconView)
 
     }
 
     fun showAchievement() {
         if (canDrawAchievements) {
-            val achievement = AchievementUnlocked(applicationContext).setLarge(true).setRounded(false).isTopAligned(false)
+            val achievement = AchievementUnlocked(applicationContext).setLarge(true).setRounded(true).isTopAligned(false)
             val data = AchievementData().setTitle("some longer title").setSubtitle(null)
                     .setBackgroundColor(Color.parseColor("#323232"))
                     .setIconBackgroundColor(Color.BLUE).setPopUpOnClickListener { view -> }
