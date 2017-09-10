@@ -59,7 +59,9 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        oneMillimetre = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f, resources.displayMetrics).toDouble()
+        oneMillimetre = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM
+                , 1f
+                , resources.displayMetrics).toDouble()
 
         setUpWebView()
 
@@ -110,7 +112,6 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
             Snackbar.make(container, "Press again to exit", Snackbar.LENGTH_SHORT)
                     .setAction("MENU", { _ ->
                         slideUp.show()
-//                        showAchievement(null, null)
                     }).show()
             backPressedOnce = true
             Handler().postDelayed({ kotlin.run { backPressedOnce = false } }, 2000)
@@ -212,7 +213,9 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                 .withLoggingEnabled(true)
                 .withGesturesEnabled(true)
                 .withStartState(SlideUp.State.HIDDEN)
-                .withListeners(SlideUp.Listener.Slide { percent -> dim.alpha = (1 - percent / 100) })
+                .withListeners(SlideUp.Listener.Slide { percent ->
+                    dim.alpha = (1 - percent / 100)
+                })
                 .build()
     }
 
@@ -242,9 +245,9 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                 val wasHandledAsIntent = handleUrl(url)
 
                 if (wasHandledAsIntent)
-                    view?.stopLoading()
+//                    view?.stopLoading()
 
-                super.onLoadResource(view, url)
+                    super.onLoadResource(view, url)
             }
         }
 //        web_view.settings.userAgentString = "Mozilla/5.0 (Linux; Android 6.0; HUAWEI GRA-L09 Build/HUAWEIGRA-L09) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
@@ -256,19 +259,25 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
 
     private fun handleUrl(url: String): Boolean {
         if (url.startsWith("intent:")) {
+            web_view.stopLoading()
             val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
             startActivity(intent)
             return true
         } else if (url.startsWith("whatsapp:")) {
-            val whatsappIntent = Intent(Intent.ACTION_SEND)
-            whatsappIntent.type = "text/plain"
-            whatsappIntent.`package` = "com.whatsapp"
+            web_view.stopLoading()
+            val whatsAppIntent = Intent(Intent.ACTION_SEND)
+            whatsAppIntent.type = "text/plain"
+            whatsAppIntent.`package` = "com.whatsapp"
             val decodedUrl = Uri.decode(url).plus(" Sent via 9banana app")
-            whatsappIntent.putExtra(Intent.EXTRA_TEXT, decodedUrl.substring(decodedUrl.indexOf("=") + 1))
+            whatsAppIntent.putExtra(Intent.EXTRA_TEXT
+                    , decodedUrl.substring(decodedUrl.indexOf("=") + 1))
             try {
-                startActivity(whatsappIntent)
+                startActivity(whatsAppIntent)
             } catch (ex: android.content.ActivityNotFoundException) {
-                Snackbar.make(container, "WhatsApp is not installed.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(container
+                        , "WhatsApp is not installed."
+                        , Snackbar.LENGTH_SHORT)
+                        .show()
             }
             return true
         }
