@@ -95,7 +95,6 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
     }
 
     override fun onBackPressed() {
-        showAchievement()
         if (slideUp.isVisible) {
             slideUp.hide()
             return
@@ -259,12 +258,11 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
 
     private fun handleUrl(url: String): Boolean {
         if (url.startsWith("intent:")) {
-            web_view.stopLoading()
             val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
             startActivity(intent)
+            web_view.goBack()
             return true
         } else if (url.startsWith("whatsapp:")) {
-            web_view.stopLoading()
             val whatsAppIntent = Intent(Intent.ACTION_SEND)
             whatsAppIntent.type = "text/plain"
             whatsAppIntent.`package` = "com.whatsapp"
@@ -273,6 +271,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                     , decodedUrl.substring(decodedUrl.indexOf("=") + 1))
             try {
                 startActivity(whatsAppIntent)
+                web_view.goBack()
             } catch (ex: android.content.ActivityNotFoundException) {
                 Snackbar.make(container
                         , "WhatsApp is not installed."

@@ -3,9 +3,9 @@ package io.finefabric.ninebanana.base
 /**
  * Created by laszlo on 2017-09-01.
  */
-abstract class BasePresenter<in V : BaseView> {
+abstract class BasePresenter<V : BaseView> {
 
-    private var view: V? = null
+    var view: V? = null
 
     protected abstract fun onViewAttached()
 

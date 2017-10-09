@@ -2,4 +2,12 @@
     <string name="app_name">9banana</string>
     <string name="distance_placeholder_zero">0.0</string>
 
+    <!--Settings-->
+    <string name="settings_lbl_show_units">Show units</string>
+    <string name="settings_lbl_other">Other</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="unit_bananas">Bananas</string>
+    <string name="unit_kilometers">Kilometers</string>
+    <string name="unit_retarded">Retarded</string>
+
 </resources>

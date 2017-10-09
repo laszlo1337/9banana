@@ -10,6 +10,10 @@ import android.view.MotionEvent
  */
 class StaticFragmentViewPager(context: Context?, attrs: AttributeSet?) : ViewPager(context, attrs) {
 
+    /*
+    * This is used to block swiping through the fragments.
+    * Only button can switch the current fragment.
+    */
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         return false
     }
