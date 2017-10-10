@@ -168,7 +168,8 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
                     .setBackgroundColor(Color.parseColor("#323232"))
                     .setIconBackgroundColor(Color.BLUE).setPopUpOnClickListener { view -> }
 
-            GlideApp.with(this).asGif().load("https://media.giphy.com/media/UogSmj4xDjQZO/giphy.gif").diskCacheStrategy(DiskCacheStrategy.ALL).listener(object : RequestListener<GifDrawable> {
+            GlideApp.with(this).asGif().load("https://media.giphy.com/media/UogSmj4xDjQZO/giphy.gif")
+                    .diskCacheStrategy(DiskCacheStrategy.ALL).listener(object : RequestListener<GifDrawable> {
                 override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                     achievement.show(data)
                     return false
@@ -186,7 +187,7 @@ class NineWebViewActivity : AppCompatActivity(), NineActivityView {
             return true
         }
         return if (!Settings.canDrawOverlays(this)) {
-            Snackbar.make(container, "Please allow system overlays for displaying achievements", Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(container, getString(R.string.alert_please_allow_overlays), Snackbar.LENGTH_INDEFINITE)
                     .setAction("ALLOW", { _ ->
                         val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + packageName))
                         startActivityForResult(intent, REQUEST_CODE)

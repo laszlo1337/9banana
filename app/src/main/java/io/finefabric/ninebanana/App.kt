@@ -2,15 +2,18 @@ package io.finefabric.ninebanana
 
 import android.app.Application
 import io.finefabric.ninebanana.entities.MyObjectBox
+import io.objectbox.BoxStore
+import io.objectbox.android.AndroidObjectBrowser
 
-/**
- * Created by laszlo on 2017-08-29.
- */
 class App: Application() {
+
+    lateinit var dataBox: BoxStore
 
     override fun onCreate() {
         super.onCreate()
 
-        val dataBox = MyObjectBox.builder().androidContext(this).build()
+        dataBox = MyObjectBox.builder().androidContext(this).build()
+        AndroidObjectBrowser(dataBox).start(this)
+        PresetsManager(dataBox)
     }
 }

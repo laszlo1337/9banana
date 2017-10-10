@@ -10,4 +10,7 @@
     <string name="unit_kilometers">Kilometers</string>
     <string name="unit_retarded">Retarded</string>
 
+    <!--Alerts-->
+    <string name="alert_please_allow_overlays">Please allow system overlays for displaying achievements</string>
+
 </resources>
